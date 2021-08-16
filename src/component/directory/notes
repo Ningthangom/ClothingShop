@@ -1,0 +1,30 @@
+
+///////////////////////////////////////////////////
+these two codes are the same: 
+
+code 1:    {
+                    this.state.sections.map(({title, imageUrl, id, size, linkUrl}) => (
+                    <MenuItem
+                     key ={id}
+                      title={title}
+                       imageUrl={imageUrl} 
+                       size={size}
+                       linkUrl={linkUrl}
+                    
+                       />))
+                }
+
+code 2:    {
+                    this.state.sections.map(({id, ...otherSectionProps}) => (
+                    <MenuItem
+                     key ={id}
+                    {...otherSectionProps}
+                    
+                       />))
+                }
+
+
+                --------------------------------------------------------------------------------------------------------------------------------
+
+
+                
