@@ -4,6 +4,7 @@ import './App.css';
 
 import HomePage from './pages/homepages/homepage.component'
 import ShopPage from './pages/shop/shop.component';
+import Header from './component/header/header.component'
 
 
 
@@ -11,6 +12,9 @@ import ShopPage from './pages/shop/shop.component';
 function App() {
   return (
     <div>
+      {/* header component is placed outside of Switch in order to have it in every page  */}
+      <Header/>
+
       <Switch>
       <Route exact path='/' component={HomePage}/>
       <Route exact path='/shop/' component={ShopPage}/>
