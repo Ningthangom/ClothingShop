@@ -7,24 +7,50 @@ import ShopPage from './pages/shop/shop.component';
 import Header from './component/header/header.component'
 import SignInAndSignUpPage from './pages/sign-in-and-sign-up/sign-in-and-sign-up.component';
 
+import {auth } from './firebase/firebase.util';
 
 
 
+class App extends React.Component {
 
-function App() {
-  return (
-    <div>
-      {/* header component is placed outside of Switch in order to have it in every page  */}
-      <Header/>
+  constructor(props) {
+    super(props);
+    this.state = {
+      currentUser:null
+    }
+  }
 
-      <Switch>
-      <Route exact path='/' component={HomePage}/>
-      <Route exact path='/shop' component={ShopPage}/>
-      <Route exact path='/signin' component={SignInAndSignUpPage}/>
-    </Switch>
-    </div>
-    
-  );
+  unsubscribeFromAuth = null;
+
+  //The componentDidMount() method allows us to execute the React code 
+  //when the component is already placed in the DOM (Document Object Model)
+  componentDidMount() {
+   this.unsubscribeFromAuth = auth.onAuthStateChanged(user => {
+      this.setState({currentUser: user});
+      console.log(user);
+    })
+  }
+  // this will unsubscribe auth 
+  componentWillUnmount() {
+    this.unsubscribeFromAuth();
+  }
+  render() {
+    return (
+      <div>
+        {/* header component is placed outside of Switch in order to have it in every page  */}
+        <Header currentUser={this.state.currentUser}/>
+  
+        <Switch>
+        <Route exact path='/' component={HomePage}/>
+        <Route exact path='/shop' component={ShopPage}/>
+        <Route exact path='/signin' component={SignInAndSignUpPage}/>
+      </Switch>
+      </div>
+      
+    );
+  }
+ 
 }
+
 
 export default App;
