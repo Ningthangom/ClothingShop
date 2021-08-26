@@ -9,6 +9,7 @@ a {
   color:black;
 }
 
+/* this is to put every element in a box  */
 *{
   box-sizing: border-box;
 }

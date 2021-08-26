@@ -14,6 +14,42 @@ const config = {
     measurementId: "G-BX6QR429SR"
   };
 
+  export const createUserProfileDocument =  async (userAuth, additinalData) => {
+     // if the userAuth does not exist,    exit from the function 
+    if(!userAuth) return;
+    // if it does exist, query inside the firestore 
+    // firestore library initially puts out  one of two different objects
+    // its either a query reference or snapshot 
+    // a query is requesting firestore a document or collection 
+
+    const userRef = firestore.doc(`users/${userAuth.uid}`);
+    const snapShot = await userRef.get();
+
+    console.log(snapShot)
+    // if the user does not exist in the database dd
+    // snapShot only represent the data 
+    // to create the data we need to use documentRef, not the napshot 
+    if(!snapShot.exists){
+        //before creating, we need to see what we need to store
+        const {displayName, email} = userAuth;
+        const createdAt = new Date();
+
+        try {
+            await userRef.set({
+                displayName,
+                email,
+                createdAt,
+                ...additinalData
+            })
+
+        }catch(error){
+            console.log('error creating user', error.message)
+        }
+    }
+
+return userRef;
+  }
+
   firebase.initializeApp(config);
 
   export const auth = firebase.auth();
