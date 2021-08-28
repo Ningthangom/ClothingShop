@@ -2,6 +2,10 @@ import React from 'react';
 import {Switch, Route} from 'react-router-dom';
 import './App.css';
 
+// import connect function from  react-import { connect } from 'react-redux'
+import {connect} from 'react-redux';
+import { setCurrentUser } from './redux/user/user.actions'
+
 import HomePage from './pages/homepages/homepage.component'
 import ShopPage from './pages/shop/shop.component';
 import Header from './component/header/header.component'
@@ -12,19 +16,15 @@ import {auth, createUserProfileDocument} from './firebase/firebase.util';
 
 
 class App extends React.Component {
-
-  constructor() {
-    super();
-    this.state = {
-      currentUser:null
-    }
-  }
-
   unsubscribeFromAuth = null;
 
   //The componentDidMount() method allows us to execute the React code 
   //when the component is already placed in the DOM (Document Object Model)
   componentDidMount() {
+
+    // destructing setCurrentUser from props 
+    const {setCurrentUser} = this.props;
+
    this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
       if(userAuth) {
         const userRef = await createUserProfileDocument(userAuth);
@@ -32,23 +32,16 @@ class App extends React.Component {
 
         userRef.onSnapshot(snapShot => {
           console.log('this is snapShot of userRef: ', snapShot)
-          this.setState({
-            currentUser: {
+              setCurrentUser({
               id: snapShot.id,
               ...snapShot.data()
-            }
-          }, () => {
-            console.log('check state', this.state)
+            })
           })
-        })
+        }
       
-      }else {
+      
  // if the above console comes back as null 
- this.setState({currentUser:userAuth})
- console.log('this is new state', this.state)
-      
-      }
-     
+ setCurrentUser(userAuth)      
     })
   }
   // this will unsubscribe auth 
@@ -59,7 +52,7 @@ class App extends React.Component {
     return (
       <div>
         {/* header component is placed outside of Switch in order to have it in every page  */}
-        <Header currentUser={this.state.currentUser}/>
+        <Header/>
   
         <Switch>
         <Route exact path='/' component={HomePage}/>
@@ -73,5 +66,14 @@ class App extends React.Component {
  
 }
 
+// as app.js does not need current user 
+// we will use mapDispatchToProps instead of mapStateToProps
 
-export default App;
+const mapDispatchToProps =dispatch => ({
+  //dispatch : whatever object you are passing me is 
+  // going to be an action object that i am going to pass every reducer
+  // this just dispatch the object 
+  setCurrentUser: user => dispatch(setCurrentUser(user))
+})
+
+export default connect (null,mapDispatchToProps )(App);
