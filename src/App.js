@@ -1,5 +1,5 @@
 import React from 'react';
-import {Switch, Route} from 'react-router-dom';
+import {Switch, Route, Redirect} from 'react-router-dom';
 import './App.css';
 
 // import connect function from  react-import { connect } from 'react-redux'
@@ -57,7 +57,9 @@ class App extends React.Component {
         <Switch>
         <Route exact path='/' component={HomePage}/>
         <Route exact path='/shop' component={ShopPage}/>
-        <Route exact path='/signin' component={SignInAndSignUpPage}/>
+        <Route exact path='/signin' render={() => this.props.currentUser ?
+         (<Redirect to="/" />)
+         :  (<SignInAndSignUpPage/>) } />
       </Switch>
       </div>
       
@@ -65,6 +67,10 @@ class App extends React.Component {
   }
  
 }
+
+const mapStateToProps = ({user}) => ({
+  currentUser:user.currentUser
+})
 
 // as app.js does not need current user 
 // we will use mapDispatchToProps instead of mapStateToProps
@@ -76,4 +82,4 @@ const mapDispatchToProps =dispatch => ({
   setCurrentUser: user => dispatch(setCurrentUser(user))
 })
 
-export default connect (null,mapDispatchToProps )(App);
+export default connect (mapStateToProps,mapDispatchToProps )(App);

@@ -1,4 +1,8 @@
-   // type: a string value: action type 
+  
+  import { UserActionTypes } from "./user.types";
+  
+  
+  // type: a string value: action type 
    // payload: can be anything 
    const INITIAL_STATE = {
       currentUser:null
@@ -9,7 +13,7 @@
    const userReducer = (state = INITIAL_STATE , action) => {
       switch(action.type){
          //whenever SET_CURRENT_USER IS action.type that gets fired 
-         case 'SET_CURRENT_USER':
+         case UserActionTypes.SET_CURRENT_USER:
             // then return a new object which represent a new state that userReducer is going 
             // to transformed into
             return {
