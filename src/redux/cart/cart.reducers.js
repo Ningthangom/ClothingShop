@@ -1,7 +1,7 @@
 
 
 import CartActionTypes from './cart.types'
-import { addItemToCart } from './cart.utils'
+import { addItemToCart, removeItemFromCart } from './cart.utils'
 
 
     const INITIAL_STATE = {
@@ -22,6 +22,21 @@ import { addItemToCart } from './cart.utils'
                 // showing previous state then add new item
                 cartItems: addItemToCart(state.cartItems, action.payload)
             }
+            case CartActionTypes.REMOVE_ITEM: 
+            return {
+                ...state, 
+                cartItems: removeItemFromCart(state.cartItems, action.payload)
+            }
+            case CartActionTypes.CLEAR_ITEM_FROM_CART:
+                // filter returns anything that yells true 
+                // if the cartitem id is not the same as the one that needs to be removed ,
+                // it will keep it 
+                return {
+                    ...state, 
+                    cartItems: state.cartItems.filter(
+                        cartItem => cartItem.id !== action.payload.id)
+                }
+
             default:
                 return state;
         }
