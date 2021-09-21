@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import { toggleCartHidden } from '../../redux/cart/cart.actions'
 import {ReactComponent as ShoppingIcon} from '../../assets/shopping-bag.svg';
 import {selectorCartItemsCount} from '../../redux/cart/cart.selectors'
+import { createStructuredSelector } from 'reselect';
 
 import './cart-icon.styles.scss'
 
@@ -24,13 +25,12 @@ const mapDispatchToProps = dispatch => ({
                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 // we are getting cartitems from cart state 
 // this state also add the quantity of all the items added to cart
-const mapStateToProps = state =>{
-    console.log('mapStatToProps in CartIcon is called');
-    return ({
-    itemCount:selectorCartItemsCount(state)
+const mapStateToProps = createStructuredSelector({
+  
+    itemCount:selectorCartItemsCount
    
 })
-}
+
 
 
 
